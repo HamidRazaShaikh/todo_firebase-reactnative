@@ -1,6 +1,6 @@
 import React from 'react';
 import auth from '@react-native-firebase/auth';
-import {StyleSheet, Text, TextInput, View, Button, Alert} from 'react-native';
+import {ActivityIndicator ,StyleSheet, Text, TextInput, View, Button, Alert} from 'react-native';
 
 export default class SignUp extends React.Component {
   constructor(props) {
@@ -8,14 +8,17 @@ export default class SignUp extends React.Component {
     this.state = {
       email: '',
       password: '',
-      auth : ''
+      auth : '',
+      loading : false
     };
   }
 
   componentDidMount (){
+    
 
     auth().onAuthStateChanged((user)=>{
-      this.setState({auth : user.uid})
+      this.setState({auth : user.email})
+      console.log(user)
 
     })
 
@@ -31,6 +34,9 @@ export default class SignUp extends React.Component {
         .then(() => this.props.navigation.navigate('Testing' , { user : this.state.auth}))
         .catch((error) => console.log(error));
 
+        console.log(this.state.auth)
+        this.setState({loading : true})
+
         
        
         
@@ -42,8 +48,8 @@ export default class SignUp extends React.Component {
   };
 
   handleLogin = () => {
-    this.props.navigation.navigate('Testing' ,{ user : this.state.auth});
-    console.log(this.state.auth)
+    this.props.navigation.navigate('Login');
+    
   };
   
   render() {
@@ -78,6 +84,7 @@ export default class SignUp extends React.Component {
               Login{' '}
             </Text>
           </Text>
+          {/* {this.state.loading ? <ActivityIndicator size="large" color="#0000ff" /> : null} */}
         </View>
       </View>
     );

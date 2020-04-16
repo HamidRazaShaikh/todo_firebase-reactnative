@@ -11,11 +11,20 @@ export default class Login extends React.Component {
     };
   }
 
+  componentDidMount (){
+
+    auth().onAuthStateChanged((user)=>{
+      this.setState({auth : user.email})
+
+    })
+
+  }
+
   handleLogin = () => {
     if (this.state.email !== '' && this.state.password !== '') {
       auth()
         .signInWithEmailAndPassword(this.state.email, this.state.password)
-        .then(() => this.props.navigation.navigate('TodoList'))
+        .then(() => this.props.navigation.navigate('Testing' , { user : this.state.auth}))
         .catch((error) => console.log(error));
       this.setState({email: '', password: ''});
     } else {
