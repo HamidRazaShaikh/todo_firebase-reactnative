@@ -1,6 +1,7 @@
 import React from 'react';
 import auth from '@react-native-firebase/auth';
-import {ActivityIndicator ,StyleSheet, Text, TextInput, View, Button, Alert} from 'react-native';
+import ActivityInd from './activity_indicator.js';
+import {StyleSheet, Text, TextInput, View, Button, Alert} from 'react-native';
 
 export default class SignUp extends React.Component {
   constructor(props) {
@@ -17,8 +18,9 @@ export default class SignUp extends React.Component {
     
 
     auth().onAuthStateChanged((user)=>{
-      this.setState({auth : user.email})
+      this.setState({auth : user.email , loading : false})
       console.log(user)
+      
 
     })
 
@@ -41,7 +43,7 @@ export default class SignUp extends React.Component {
        
         
 
-      this.setState({email: '', password: ''});
+      this.setState({email: '', password: '' , loading : true});
     } else {
       Alert.alert('Oops!', 'Please fill in the respective fields.');
     }
@@ -86,6 +88,7 @@ export default class SignUp extends React.Component {
           </Text>
           {/* {this.state.loading ? <ActivityIndicator size="large" color="#0000ff" /> : null} */}
         </View>
+        {this.state.loading ? <ActivityInd/> : null}
       </View>
     );
   }

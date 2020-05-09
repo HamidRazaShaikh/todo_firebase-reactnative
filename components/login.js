@@ -1,5 +1,6 @@
 import React from 'react';
 import auth from '@react-native-firebase/auth';
+import ActivityInd from './activity_indicator.js'
 import {StyleSheet, Text, TextInput, View, Button, Alert} from 'react-native';
 
 export default class Login extends React.Component {
@@ -8,6 +9,8 @@ export default class Login extends React.Component {
     this.state = {
       email: '',
       password: '',
+      loading : false,
+      auth : ''
     };
   }
 
@@ -15,6 +18,8 @@ export default class Login extends React.Component {
 
     auth().onAuthStateChanged((user)=>{
       this.setState({auth : user.email})
+      this.setState({loading : false})
+
 
     })
 
@@ -26,7 +31,7 @@ export default class Login extends React.Component {
         .signInWithEmailAndPassword(this.state.email, this.state.password)
         .then(() => this.props.navigation.navigate('Testing' , { user : this.state.auth}))
         .catch((error) => console.log(error));
-      this.setState({email: '', password: ''});
+      this.setState({email: '', password: '', loading : true});
     } else {
       Alert.alert('Oops!', 'Please fill in the respective fields.');
     }
@@ -52,6 +57,7 @@ export default class Login extends React.Component {
           value={this.state.password}
         />
         <Button title="Login" color="#e93766" onPress={this.handleLogin} />
+        {this.state.loading ? <ActivityInd/> : null}
         
       </View>
     );
